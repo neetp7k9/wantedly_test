@@ -1,0 +1,53 @@
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+This is my home page
+<p>Use is <%= @user.id%> </p>
+<p>Mail is <%= @user.email%> </p>
+<div style="width:500px;">
+<select class="select-tags  form-control select2-hidden-accessible" multiple="" tabindex="-1" >
+</select>
+</div>
+
+<script type="text/javascript">
+  $(".select-tags").select2({
+  ajax: {
+    data: function (params) {
+      var query = {
+        term: params.term,
+      }
+      return query;
+    },
+    url: function (params) {
+      return '/skills/search';
+    },
+    processResults: function (data) {
+      return {
+        results: data.result
+      };
+    }
+  }
+  })
+  $(".select2").width("100%");//problem need solve
+  $('.select-tags').on('change', function (event) {
+  // Do something
+    console.log($(event.target).val());
+    $.ajax({
+        url: '/users/updateSkills',
+        type: 'POST',
+        data: {skills: $(event.target).val()}, 
+        success: function(data, textStatus, jqXHR)
+        {   
+          console.log(data);
+        }
+    }); 
+  });
+</script>
